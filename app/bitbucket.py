@@ -2,7 +2,7 @@ from flask import Flask
 from flask import request
 import json
 import requests
-import helpers
+import app.helpers as helpers
 import datetime
 
 
@@ -120,7 +120,7 @@ def process_payload_cloud(hook_path, data, event_key):
     """
     text = ""
     attachment = {}
-    
+
     event_name = get_event_action_text(event_key)
     actor_name = data["actor"]["display_name"]
     actor_url = data["actor"]["links"]["html"]["href"]
@@ -141,7 +141,7 @@ def process_payload_cloud(hook_path, data, event_key):
         pr_url = data["pullrequest"]["links"]["html"]["href"]
 
         text = event_name.format("[" + actor_name + "](" + actor_url + ")", "[#" + pr_id + "](" + pr_url + ")")
-        
+
         color = ''
         if event_key == 'pullrequest:approved' or event_key == 'pullrequest:merged':
             color = 'good'
@@ -185,9 +185,9 @@ def process_payload_cloud(hook_path, data, event_key):
                             "short": False,
                             "title": "Comment",
                             "value": comment_text
-                        }]                
+                        }]
 
-    elif event_key.startswith('repo:commit_status_'):        
+    elif event_key.startswith('repo:commit_status_'):
         commit_author_name = data["commit_status"]["commit"]["author"]["user"]["display_name"]
         commit_author_url = data["commit_status"]["commit"]["author"]["user"]["links"]["html"]["href"]
         commit_author_icon_url = data["commit_status"]["commit"]["author"]["user"]["links"]["avatar"]["href"]
@@ -327,5 +327,5 @@ def health():
     return 'OK'
 
 if __name__ == '__main__':
-   app.run(host = application_host, port = application_port, 
+   app.run(host = application_host, port = application_port,
            debug = application_debug)

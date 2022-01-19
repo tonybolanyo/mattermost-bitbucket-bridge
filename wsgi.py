@@ -1,4 +1,4 @@
-from bitbucket import app
+from app.bitbucket import app
 
 if __name__ == "__main__":
   app.run()
